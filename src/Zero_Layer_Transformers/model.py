@@ -1,5 +1,16 @@
-import torch
-import torch.nn  
+import torch.nn as nn
+from torch.nn import functional as F 
+from Dataset import Tiny_Shakespeare 
+
+# hyperparameters
+
+batch_size = 64
+ctx_length = 8
+max_iter = 1000
+learning_rate = 1e-2
+device = 'mps'
+
+
 
 class ZeroLayerModel():
 
