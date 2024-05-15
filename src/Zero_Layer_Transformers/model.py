@@ -9,7 +9,7 @@ from transformers import GPT2Tokenizer
 batch_size = 64
 ctx_length = 8
 learning_rate = 1e-2
-device = 'mps'
+device = 'cuda'
 eval_iters = 200
 
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
@@ -97,11 +97,13 @@ class ZeroLayerModel(nn.Module):
             probs = F.softmax(logits,dim=-1)
             nan_mask = torch.isnan(probs)
             # Print the tensor and the NaN mask
-            print("Tensor:", probs)
-            print("NaN Mask:", nan_mask)
-            print("Prob:",probs)
+            #print("Tensor:", probs)
+            #print("NaN Mask:", nan_mask)
+            
+            #print("Prob:",probs)
             idx_next = torch.multinomial(probs,num_samples=1)
             idx = torch.cat((idx,idx_next),dim=1)
+        return idx 
     
     
 if __name__ == "__main__":
@@ -112,7 +114,7 @@ if __name__ == "__main__":
     model = ZeroLayerModel(d_model,vocab_size)
     
     m = model.to(device)
-    context = torch.zeros((1, 1), dtype=torch.int, device=device)
+    context = torch.zeros((1, 1), dtype=torch.long, device=device)
     print(tokenizer.decode(model.generate(context, max_tokens=50)[0].tolist()))
     # create a PyTorch optimizer
     optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
