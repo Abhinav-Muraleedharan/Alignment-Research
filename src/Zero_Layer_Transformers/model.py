@@ -112,7 +112,7 @@ if __name__ == "__main__":
     max_iters = 1000
     eval_interval = 100
     model = ZeroLayerModel(d_model,vocab_size)
-    
+    model.load_state_dict(torch.load('model_weights.pth'))
     m = model.to(device)
     context = torch.zeros((1, 1), dtype=torch.long, device=device)
     print(tokenizer.decode(model.generate(context, max_tokens=50)[0].tolist()))
