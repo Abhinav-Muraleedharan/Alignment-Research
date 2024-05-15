@@ -9,12 +9,15 @@ tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 
 d_model = 100
 vocab_size = 50257
-device = "mps"
+device = "cuda"
 
 
 # Load the model and weights
 model = ZeroLayerModel(d_model, vocab_size).to(device)
 model.load_state_dict(torch.load('model_weights.pth'))
 model.eval()
-context = torch.zeros((1, 1), dtype=torch.long, device=device)
+
+text_input = "Would you kill anyone ?"
+context = torch.tensor([tokenizer.encode(text_input)], device=device)
+
 print(tokenizer.decode(model.generate(context, max_tokens=500)[0].tolist()))

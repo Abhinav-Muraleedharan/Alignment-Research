@@ -20,9 +20,9 @@ with open('input.txt', 'r', encoding='utf-8') as f:
 
 
 # Testing Tokenizer
-text_input = text[0:1000]
-tokens = tokenizer.encode(text_input)
-print(tokens)
+# text_input = text[0:1000]
+# tokens = tokenizer.encode(text_input)
+# print(tokens)
 
 data = torch.tensor(tokenizer.encode(text), dtype= torch.long)
 n = int(0.9*len(data)) # first 90% will be train, rest val
@@ -93,7 +93,7 @@ class ZeroLayerModel(nn.Module):
         for _ in range(max_tokens):
             logits, loss = self(idx)
             logits = logits[:,-1,:]
-            print(logits)
+            # print(logits)
             probs = F.softmax(logits,dim=-1)
             nan_mask = torch.isnan(probs)
             # Print the tensor and the NaN mask
@@ -103,11 +103,7 @@ class ZeroLayerModel(nn.Module):
             #print("Prob:",probs)
             idx_next = torch.multinomial(probs,num_samples=1)
             idx = torch.cat((idx,idx_next),dim=1)
-<<<<<<< HEAD
         return idx 
-=======
-            return idx
->>>>>>> af06bf330b56e183e40f23e485d543fc060f35f3
     
     
 if __name__ == "__main__":
