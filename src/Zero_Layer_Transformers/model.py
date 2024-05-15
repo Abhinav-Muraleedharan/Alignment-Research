@@ -102,6 +102,7 @@ class ZeroLayerModel(nn.Module):
             print("Prob:",probs)
             idx_next = torch.multinomial(probs,num_samples=1)
             idx = torch.cat((idx,idx_next),dim=1)
+            return idx
     
     
 if __name__ == "__main__":
