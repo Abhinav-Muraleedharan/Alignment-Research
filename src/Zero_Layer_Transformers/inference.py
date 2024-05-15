@@ -9,7 +9,7 @@ tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 
 d_model = 100
 vocab_size = 50257
-device = "cuda"
+device = "mps"
 
 
 # Load the model and weights
