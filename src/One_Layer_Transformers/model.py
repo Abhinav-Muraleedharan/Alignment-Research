@@ -6,10 +6,10 @@ from transformers import GPT2Tokenizer
 
 # hyperparameters
 
-batch_size = 64
-ctx_length = 8
-learning_rate = 1e-2
-device = 'mps'
+batch_size = 8
+ctx_length = 32
+learning_rate = 3e-4
+device = 'cuda'
 eval_iters = 200
 n_embd = 384
 n_head = 6
@@ -172,9 +172,9 @@ class OneLayerModel(nn.Module):
     def generate(self,idx,max_tokens):
         for _ in range(max_tokens):
             idx_cond = idx[:, -ctx_length:]
-            logits, loss = self(idx)
+            logits, loss = self(idx_cond)
             logits = logits[:,-1,:]
-            print(logits)
+            # print(logits)
             probs = F.softmax(logits,dim=-1)
             # nan_mask = torch.isnan(probs)
             # Print the tensor and the NaN mask
@@ -183,15 +183,16 @@ class OneLayerModel(nn.Module):
             # print("Prob:",probs)
             idx_next = torch.multinomial(probs,num_samples=1)
             idx = torch.cat((idx,idx_next),dim=1)
-            return idx
+        return idx
     
     
 if __name__ == "__main__":
-    d_model = 100
+    d_model = 384
     vocab_size = 50257
-    max_iters = 1000
+    max_iters = 2000
     eval_interval = 100
     model = OneLayerModel(d_model,vocab_size)
+    model.load_state_dict(torch.load('model_weights_2.pth'))
     # print the number of parameters in the model
     
     
@@ -218,7 +219,7 @@ if __name__ == "__main__":
         loss.backward()
         optimizer.step()
     # Save model weights
-    torch.save(model.state_dict(), 'model_weights.pth')
+    torch.save(model.state_dict(), 'model_weights_2.pth')
     context = torch.zeros((1, 1), dtype=torch.long, device=device)
     print(tokenizer.decode(model.generate(context, max_tokens=500)[0].tolist()))
 
