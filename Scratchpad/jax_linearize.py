@@ -43,7 +43,7 @@ def network(params, x):
 
 
 if __name__ == '__main__':
-    
+
     layer_sizes = [784, 512, 512, 10]
     step_size = 0.01
     num_epochs = 10
@@ -57,3 +57,4 @@ if __name__ == '__main__':
     print(y)
     x_bar = jnp.zeros((28*28,))
     print(f_jvp(params,x_bar))
+   
