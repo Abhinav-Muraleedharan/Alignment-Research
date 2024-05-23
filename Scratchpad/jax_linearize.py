@@ -55,6 +55,6 @@ if __name__ == '__main__':
     print(output)
     y, f_jvp = jax.linearize(network,params,x)
     print(y)
-    x_bar = jnp.zeros((28*28,))
+    x_bar = jnp.ones((28*28,))
     print(f_jvp(params,x_bar))
    
