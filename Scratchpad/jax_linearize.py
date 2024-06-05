@@ -52,9 +52,15 @@ if __name__ == '__main__':
     params = init_network_params(layer_sizes, random.key(0))
     x = random.normal(random.key(1), (28 * 28,))
     output = network(params,x)
-    print(output)
-    y, f_jvp = jax.linearize(network,params,x)
-    print(y)
+    # print(output)
+    y, f_jvp = jax.linearize(network)(params,x)
+    # print(y)
     x_bar = jnp.ones((28*28,))
-    print(f_jvp(params,x_bar))
+    # print(f_jvp(params,x_bar))
+    # Compute gradient of network output with respect to inputs
+    input_grads = jax.jacobian(network, argnums=1)(params, x)
+    # Compute gradient of network output with respect to weights
+    print("Gradient with respect to inputs",input_grads)
+    weight_grads = jax.jacobian(network, argnums=0)(params, x)
+    print("Gradient with respect to weights",weight_grads)
    
